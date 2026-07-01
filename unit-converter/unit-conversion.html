@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>দৈর্ঘ্যের একক রূপান্তর — সূত্র ও অংক</title>
+<style>
+  :root{
+    --paper:#f6efe0;
+    --paper2:#efe6d0;
+    --ink:#1f3d3a;
+    --ink-soft:#3c5c56;
+    --tape-yellow:#e8b62c;
+    --tape-red:#c0392b;
+    --line:#c9bd9a;
+    --accent:#2f6f5e;
+    --accent2:#b0472f;
+    --card:#fffdf6;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 34px, rgba(120,110,70,0.07) 35px),
+      var(--paper);
+    color:var(--ink);
+    font-family: "Noto Sans Bengali","Segoe UI",system-ui,sans-serif;
+    line-height:1.6;
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:0 20px 80px;}
+
+  /* HERO */
+  .hero{
+    position:relative;
+    padding:70px 20px 50px;
+    text-align:center;
+    overflow:hidden;
+    border-bottom:3px solid var(--ink);
+    background:linear-gradient(180deg, var(--paper2), var(--paper));
+  }
+  .hero .eyebrow{
+    letter-spacing:.35em;
+    font-size:12px;
+    color:var(--accent2);
+    font-weight:700;
+    text-transform:uppercase;
+  }
+  .hero h1{
+    font-size:clamp(30px,6vw,52px);
+    margin:14px 0 6px;
+    font-weight:800;
+    color:var(--ink);
+  }
+  .hero p.sub{
+    font-size:17px;
+    color:var(--ink-soft);
+    max-width:560px;
+    margin:0 auto;
+  }
+  .tape-strip{
+    margin-top:34px;
+    height:46px;
+    width:100%;
+    background:repeating-linear-gradient(90deg, var(--tape-yellow) 0 38px, #d9a821 38px 40px);
+    border-top:3px solid #7a5c10;
+    border-bottom:3px solid #7a5c10;
+    position:relative;
+    overflow:hidden;
+  }
+  .tape-strip::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image: repeating-linear-gradient(90deg, transparent 0 18px, #7a5c10 18px 20px);
+    animation: slide 6s linear infinite;
+  }
+  @keyframes slide{ from{transform:translateX(0);} to{transform:translateX(-40px);} }
+
+  /* SECTION LABELS */
+  section{margin-top:60px;}
+  .kicker{
+    display:flex;align-items:center;gap:12px;
+    font-size:13px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--accent2); font-weight:700; margin-bottom:10px;
+  }
+  .kicker::after{content:"";flex:1;height:1px;background:var(--line);}
+  h2{font-size:clamp(22px,4vw,30px);margin:0 0 18px;color:var(--ink);}
+
+  /* THE RULE — signature animated element */
+  .rule-box{
+    border:2px solid var(--ink);
+    background:var(--card);
+    border-radius:14px;
+    padding:28px;
+    display:flex;
+    flex-direction:column;
+    gap:22px;
+    box-shadow:6px 6px 0 rgba(31,61,58,0.08);
+  }
+  .rule-row{
+    display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+  }
+  .unit-pill{
+    padding:10px 18px;border-radius:999px;font-weight:700;font-size:15px;
+    border:2px solid var(--ink); background:var(--paper);
+    min-width:80px; text-align:center;
+  }
+  .unit-pill.big{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .unit-pill.small{background:var(--accent2);color:#fff;border-color:var(--accent2);}
+  .op-badge{
+    width:54px;height:54px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:26px;font-weight:800;color:#fff;
+    flex-shrink:0;
+    position:relative;
+  }
+  .op-badge.mul{background:var(--accent);animation:pulse 1.8s ease-in-out infinite;}
+  .op-badge.div{background:var(--accent2);animation:pulse 1.8s ease-in-out infinite .3s;}
+  @keyframes pulse{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.16);}
+  }
+  .arrow{
+    flex:1; min-width:60px; height:3px; background:var(--line); position:relative;
+  }
+  .arrow.big-to-small::after, .arrow.small-to-big::after{
+    content:"▶"; position:absolute; right:-2px; top:-11px; font-size:16px; color:var(--ink-soft);
+  }
+  .arrow.small-to-big::before{content:none;}
+  .rule-text{font-size:15px;color:var(--ink-soft);}
+  .rule-text b{color:var(--ink);}
+
+  /* CONVERSION TABLES */
+  .grid2{
+    display:grid; grid-template-columns:1fr 1fr; gap:20px;
+  }
+  @media(max-width:640px){.grid2{grid-template-columns:1fr;}}
+  .card{
+    background:var(--card); border:2px solid var(--ink); border-radius:14px;
+    padding:22px; box-shadow:5px 5px 0 rgba(31,61,58,0.08);
+  }
+  .card h3{margin:0 0 14px;font-size:17px;color:var(--accent);border-bottom:2px dashed var(--line);padding-bottom:10px;}
+  .formula-row{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:9px 0; border-bottom:1px solid var(--line); font-size:15.5px;
+  }
+  .formula-row:last-child{border-bottom:none;}
+  .formula-row .lhs{color:var(--ink-soft);}
+  .formula-row .rhs{font-weight:700;color:var(--ink);}
+
+  /* WORKED EXAMPLES — click to reveal steps */
+  .example{
+    background:var(--card); border:2px solid var(--ink); border-radius:14px;
+    padding:22px; margin-bottom:18px; box-shadow:5px 5px 0 rgba(31,61,58,0.08);
+  }
+  .example h4{margin:0 0 4px;font-size:17px;}
+  .example .q{color:var(--accent2);font-weight:700;}
+  .steps{margin-top:14px;display:flex;flex-direction:column;gap:0;}
+  .step{
+    max-height:0; opacity:0; overflow:hidden;
+    transition:max-height .5s ease, opacity .5s ease, padding .5s ease;
+    border-left:3px solid var(--accent); padding-left:0; margin-left:6px;
+  }
+  .step.show{max-height:120px;opacity:1;padding:8px 0 8px 16px;}
+  .step .tag{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;}
+  .step .math{font-size:16px;margin-top:3px;}
+  .reveal-btn{
+    margin-top:12px; border:2px solid var(--ink); background:var(--tape-yellow);
+    color:var(--ink); font-weight:700; padding:9px 18px; border-radius:999px;
+    cursor:pointer; font-size:14px; transition:transform .15s ease;
+  }
+  .reveal-btn:hover{transform:translateY(-2px);}
+  .reveal-btn:active{transform:translateY(0);}
+  .answer-badge{
+    display:none; margin-top:12px; font-weight:800; color:#fff;
+    background:var(--accent); padding:8px 16px; border-radius:8px; width:fit-content;
+  }
+  .answer-badge.show{display:block; animation:pop .4s ease;}
+  @keyframes pop{from{transform:scale(.8);opacity:0;}to{transform:scale(1);opacity:1;}}
+
+  /* IMAGE GALLERY */
+  .figure{
+    background:var(--card); border:2px solid var(--ink); border-radius:14px;
+    overflow:hidden; margin-bottom:26px; box-shadow:6px 6px 0 rgba(31,61,58,0.08);
+    opacity:0; transform:translateY(24px);
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  .figure.in-view{opacity:1;transform:translateY(0);}
+  .figure img{width:100%;display:block;}
+  .figure figcaption{padding:16px 20px; font-size:14.5px; color:var(--ink-soft); border-top:2px dashed var(--line);}
+  .figure figcaption b{color:var(--ink);}
+
+  /* MINI CONVERTER */
+  .converter{
+    background:var(--ink); color:var(--paper); border-radius:14px; padding:26px;
+  }
+  .converter h3{margin:0 0 16px;color:var(--tape-yellow);}
+  .conv-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .conv-row input, .conv-row select{
+    padding:10px 12px;border-radius:8px;border:2px solid var(--paper2);
+    font-size:15px; background:var(--paper); color:var(--ink); font-weight:600;
+  }
+  .conv-row input{width:120px;}
+  .conv-result{
+    margin-top:16px;font-size:20px;font-weight:800;color:var(--tape-yellow);
+    min-height:28px;
+  }
+
+  footer{
+    text-align:center; margin-top:70px; padding-top:24px;
+    border-top:2px solid var(--line); color:var(--ink-soft); font-size:13.5px;
+  }
+
+  .fade-up{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;}
+  .fade-up.in-view{opacity:1; transform:translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow">সূত্র · অংক · ছবি সহ</div>
+  <h1>দৈর্ঘ্যের একক রূপান্তর</h1>
+  <p class="sub">মিলিমিটার থেকে কিলোমিটার, ইঞ্চি থেকে মাইল — প্রতিটা রূপান্তরের সূত্র, ধাপে ধাপে অংক এবং হাতে লেখা নোটের ছবি একসাথে।</p>
+  <div class="tape-strip"></div>
+</div>
+
+<div class="wrap">
+
+  <!-- THE GOLDEN RULE -->
+  <section id="rule">
+    <div class="kicker">মূল নিয়ম</div>
+    <h2>বড় → ছোট = গুণ &nbsp;|&nbsp; ছোট → বড় = ভাগ</h2>
+    <div class="rule-box fade-up">
+      <div class="rule-row">
+        <div class="unit-pill big">বড় একক<br><span style="font-size:12px;font-weight:400;">যেমন: মিটার</span></div>
+        <div class="op-badge mul">×</div>
+        <div class="arrow big-to-small"></div>
+        <div class="unit-pill small">ছোট একক<br><span style="font-size:12px;font-weight:400;">যেমন: সেন্টিমিটার</span></div>
+      </div>
+      <div class="rule-text">➜ <b>বড় একক থেকে ছোট এককে</b> যেতে হলে রূপান্তর ফ্যাক্টর দিয়ে <b>গুণ</b> করতে হবে। কারণ ছোট এককে সংখ্যাটা বড় হয়ে যায়।</div>
+      <div class="rule-row">
+        <div class="unit-pill small">ছোট একক<br><span style="font-size:12px;font-weight:400;">যেমন: সেন্টিমিটার</span></div>
+        <div class="op-badge div">÷</div>
+        <div class="arrow small-to-big"></div>
+        <div class="unit-pill big">বড় একক<br><span style="font-size:12px;font-weight:400;">যেমন: মিটার</span></div>
+      </div>
+      <div class="rule-text">➜ <b>ছোট একক থেকে বড় এককে</b> যেতে হলে রূপান্তর ফ্যাক্টর দিয়ে <b>ভাগ</b> করতে হবে। কারণ বড় এককে সংখ্যাটা ছোট হয়ে যায়।</div>
+    </div>
+  </section>
+
+  <!-- FORMULA TABLES -->
+  <section id="formulas">
+    <div class="kicker">সূত্রসমূহ</div>
+    <h2>একক রূপান্তরের সূত্র</h2>
+    <div class="grid2">
+      <div class="card fade-up">
+        <h3>মেট্রিক এককের ভিত্তি (মিটার থেকে)</h3>
+        <div class="formula-row"><span class="lhs">1 মিটার (m)</span><span class="rhs">= 100 সেন্টিমিটার (cm)</span></div>
+        <div class="formula-row"><span class="lhs">1 মিটার (m)</span><span class="rhs">= 1000 মিলিমিটার (mm)</span></div>
+        <div class="formula-row"><span class="lhs">1 কিলোমিটার (km)</span><span class="rhs">= 1000 মিটার (m)</span></div>
+        <div class="formula-row"><span class="lhs">1 সেন্টিমিটার (cm)</span><span class="rhs">= 10 মিলিমিটার (mm)</span></div>
+      </div>
+      <div class="card fade-up">
+        <h3>মিটার ↔ ফুট / ইঞ্চি</h3>
+        <div class="formula-row"><span class="lhs">1 মিটার (m)</span><span class="rhs">= 3.28 ফুট (feet)</span></div>
+        <div class="formula-row"><span class="lhs">1 মিটার (m)</span><span class="rhs">= 39.37 ইঞ্চি (inch)</span></div>
+        <div class="formula-row"><span class="lhs">1 ফুট (feet)</span><span class="rhs">= 0.3048 মিটার (m)</span></div>
+        <div class="formula-row"><span class="lhs">1 ফুট (feet)</span><span class="rhs">= 30.48 সেন্টিমিটার (cm)</span></div>
+      </div>
+      <div class="card fade-up">
+        <h3>ইঞ্চি ↔ সেমি / মিমি / ফুট</h3>
+        <div class="formula-row"><span class="lhs">1 ইঞ্চি (inch)</span><span class="rhs">= 2.54 সেন্টিমিটার (cm)</span></div>
+        <div class="formula-row"><span class="lhs">1 ইঞ্চি (inch)</span><span class="rhs">= 25.4 মিলিমিটার (mm)</span></div>
+        <div class="formula-row"><span class="lhs">1 ফুট (feet)</span><span class="rhs">= 12 ইঞ্চি (inch)</span></div>
+        <div class="formula-row"><span class="lhs">1 গজ (yard)</span><span class="rhs">= 3 ফুট (feet)</span></div>
+      </div>
+      <div class="card fade-up">
+        <h3>মাইল ↔ কিলোমিটার / ফুট</h3>
+        <div class="formula-row"><span class="lhs">1 মাইল (mile)</span><span class="rhs">= 1.61 কিলোমিটার (km)</span></div>
+        <div class="formula-row"><span class="lhs">1 কিলোমিটার (km)</span><span class="rhs">= 0.62 মাইল (mile)</span></div>
+        <div class="formula-row"><span class="lhs">1 মাইল (mile)</span><span class="rhs">= 5280 ফুট (feet)</span></div>
+        <div class="formula-row"><span class="lhs">1 গজ (yard)</span><span class="rhs">= 36 ইঞ্চি (inch)</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHOTO 1 : formula board -->
+  <section>
+    <div class="kicker">নোটের ছবি — ১</div>
+    <h2>হাতে লেখা সূত্র বোর্ড</h2>
+    <figure class="figure">
+      <img src="assets/img1_formulas.jpg" alt="একক রূপান্তরের সূত্র এবং অংকের হাতে লেখা ছবি">
+      <figcaption><b>এই ছবিতে যা আছে:</b> মিটার–ফুট–ইঞ্চি–মিমি এর মূল সূত্র (বাম পাশে), আর ডান পাশে ৫০ ইঞ্চি→সেমি, ৮০ ইঞ্চি→মিমি, ৫ মিটার→ইঞ্চি — এই ৩টা উদাহরণের হাতে-কষা অংক। নিচে লেখা নিয়ম: "বড় থেকে ছোটতে গেলে গুণ, ছোট থেকে বড়তে গেলে ভাগ।"</figcaption>
+    </figure>
+  </section>
+
+  <!-- WORKED EXAMPLES -->
+  <section id="examples">
+    <div class="kicker">ধাপে ধাপে অংক</div>
+    <h2>উদাহরণ (ছবি ১ থেকে যাচাই করা)</h2>
+
+    <div class="example fade-up">
+      <h4>১. <span class="q">৫০ ইঞ্চি = কত সেন্টিমিটার?</span></h4>
+      <button class="reveal-btn" onclick="revealSteps(this,'ex1')">ধাপ দেখাও ▾</button>
+      <div class="steps" id="ex1">
+        <div class="step"><div class="tag">সূত্র</div><div class="math">1 ইঞ্চি = 2.54 সেমি</div></div>
+        <div class="step"><div class="tag">ইঞ্চি → সেমি (ছোট একক, তাই গুণ)</div><div class="math">50 × 2.54</div></div>
+        <div class="step"><div class="tag">ফলাফল</div><div class="math">= 127 সেমি</div></div>
+      </div>
+      <div class="answer-badge" id="ans-ex1">উত্তর: 50 inch = 127 cm</div>
+    </div>
+
+    <div class="example fade-up">
+      <h4>২. <span class="q">১২৭ সেন্টিমিটার = কত ইঞ্চি?</span></h4>
+      <button class="reveal-btn" onclick="revealSteps(this,'ex2')">ধাপ দেখাও ▾</button>
+      <div class="steps" id="ex2">
+        <div class="step"><div class="tag">সূত্র</div><div class="math">1 ইঞ্চি = 2.54 সেমি</div></div>
+        <div class="step"><div class="tag">সেমি → ইঞ্চি (বড় একক, তাই ভাগ)</div><div class="math">127 ÷ 2.54</div></div>
+        <div class="step"><div class="tag">ফলাফল</div><div class="math">= 50 ইঞ্চি</div></div>
+      </div>
+      <div class="answer-badge" id="ans-ex2">উত্তর: 127 cm = 50 inch</div>
+    </div>
+
+    <div class="example fade-up">
+      <h4>৩. <span class="q">৮০ ইঞ্চি = কত মিলিমিটার?</span></h4>
+      <button class="reveal-btn" onclick="revealSteps(this,'ex3')">ধাপ দেখাও ▾</button>
+      <div class="steps" id="ex3">
+        <div class="step"><div class="tag">সূত্র</div><div class="math">1 ইঞ্চি = 25.4 মিমি</div></div>
+        <div class="step"><div class="tag">ইঞ্চি → মিমি (ছোট একক, তাই গুণ)</div><div class="math">80 × 25.4</div></div>
+        <div class="step"><div class="tag">ফলাফল</div><div class="math">= 2032 মিমি</div></div>
+      </div>
+      <div class="answer-badge" id="ans-ex3">উত্তর: 80 inch = 2032 mm</div>
+    </div>
+
+    <div class="example fade-up">
+      <h4>৪. <span class="q">২০৩২ মিলিমিটার = কত ইঞ্চি?</span></h4>
+      <button class="reveal-btn" onclick="revealSteps(this,'ex4')">ধাপ দেখাও ▾</button>
+      <div class="steps" id="ex4">
+        <div class="step"><div class="tag">সূত্র</div><div class="math">1 ইঞ্চি = 25.4 মিমি</div></div>
+        <div class="step"><div class="tag">মিমি → ইঞ্চি (বড় একক, তাই ভাগ)</div><div class="math">2032 ÷ 25.4</div></div>
+        <div class="step"><div class="tag">ফলাফল</div><div class="math">= 80 ইঞ্চি</div></div>
+      </div>
+      <div class="answer-badge" id="ans-ex4">উত্তর: 2032 mm = 80 inch</div>
+    </div>
+
+    <div class="example fade-up">
+      <h4>৫. <span class="q">৫ মিটার = কত ইঞ্চি?</span></h4>
+      <button class="reveal-btn" onclick="revealSteps(this,'ex5')">ধাপ দেখাও ▾</button>
+      <div class="steps" id="ex5">
+        <div class="step"><div class="tag">সূত্র</div><div class="math">1 মিটার = 39.37 ইঞ্চি</div></div>
+        <div class="step"><div class="tag">মিটার → ইঞ্চি (ছোট একক, তাই গুণ)</div><div class="math">5 × 39.37</div></div>
+        <div class="step"><div class="tag">ফলাফল</div><div class="math">= 196.85 ≈ 196.8 ইঞ্চি</div></div>
+      </div>
+      <div class="answer-badge" id="ans-ex5">উত্তর: 5 m ≈ 196.8 inch</div>
+    </div>
+
+    <div class="example fade-up">
+      <h4>৬. <span class="q">১৯৬.৮ ইঞ্চি = কত মিটার?</span></h4>
+      <button class="reveal-btn" onclick="revealSteps(this,'ex6')">ধাপ দেখাও ▾</button>
+      <div class="steps" id="ex6">
+        <div class="step"><div class="tag">সূত্র</div><div class="math">1 মিটার = 39.37 ইঞ্চি</div></div>
+        <div class="step"><div class="tag">ইঞ্চি → মিটার (বড় একক, তাই ভাগ)</div><div class="math">196.8 ÷ 39.37</div></div>
+        <div class="step"><div class="tag">ফলাফল</div><div class="math">≈ 5 মিটার</div></div>
+      </div>
+      <div class="answer-badge" id="ans-ex6">উত্তর: 196.8 inch ≈ 5 m</div>
+    </div>
+  </section>
+
+  <!-- PHOTO 2: tape measure with fingers -->
+  <section>
+    <div class="kicker">নোটের ছবি — ২</div>
+    <h2>বাস্তবে টেপ মাপা দেখুন</h2>
+    <figure class="figure">
+      <img src="assets/img2_tape.jpg" alt="আঙুল দিয়ে টেপ মেজার (measuring tape) ধরে দৈর্ঘ্য মাপার ছবি">
+      <figcaption><b>এই ছবিতে যা আছে:</b> একটা মেজারিং টেপ (মিটার/ফুট স্কেল) দুই আঙুল দিয়ে ধরে একটা দৈর্ঘ্য মাপা হচ্ছে — টেপের উপরে সেন্টিমিটার/ইঞ্চি স্কেল দেখা যাচ্ছে। এইভাবে বাস্তবে মাপ নিয়ে উপরের সূত্র দিয়ে অন্য এককে রূপান্তর করা যায়।</figcaption>
+    </figure>
+  </section>
+
+  <!-- PHOTO 3: extra notes -->
+  <section>
+    <div class="kicker">নোটের ছবি — ৩</div>
+    <h2>অতিরিক্ত একক নোট</h2>
+    <figure class="figure">
+      <img src="assets/img3_notes.jpg" alt="আরও একক রূপান্তরের হাতে লেখা নোটের ছবি">
+      <figcaption><b>এই ছবিতে যা আছে:</b> ইঞ্চি–সেন্টিমিটার–ফুট–মিটার–কিলোমিটারের আরও কিছু হাতে লেখা রূপান্তর এবং গজ (yard) সম্পর্কিত নোট। নিচের যাচাই-করা টেবিলে এই মানগুলোর সঠিক (নির্ভুল) রূপ দেওয়া হলো, যাতে হাতে লেখায় কোনো ছোটখাটো ভুল থাকলেও তা এখানে সংশোধন হয়ে যায়।</figcaption>
+    </figure>
+    <div class="card fade-up">
+      <h3>যাচাই-করা নির্ভুল মানসমূহ (Verified — no errors)</h3>
+      <div class="formula-row"><span class="lhs">1 ইঞ্চি (inch)</span><span class="rhs">= 2.54 cm</span></div>
+      <div class="formula-row"><span class="lhs">1 ফুট (feet)</span><span class="rhs">= 12 inch</span></div>
+      <div class="formula-row"><span class="lhs">10 মিলিমিটার (mm)</span><span class="rhs">= 1 সেন্টিমিটার (cm)</span></div>
+      <div class="formula-row"><span class="lhs">100 সেন্টিমিটার (cm)</span><span class="rhs">= 1 মিটার (m)</span></div>
+      <div class="formula-row"><span class="lhs">1000 মিটার (m)</span><span class="rhs">= 1 কিলোমিটার (km)</span></div>
+      <div class="formula-row"><span class="lhs">1 গজ (yard)</span><span class="rhs">= 3 ফুট = 36 ইঞ্চি</span></div>
+    </div>
+  </section>
+
+  <!-- LIVE CONVERTER -->
+  <section id="live">
+    <div class="kicker">নিজে চেষ্টা করুন</div>
+    <h2>লাইভ কনভার্টার</h2>
+    <div class="converter fade-up">
+      <h3>যেকোনো মান লিখে দুটো একক বেছে নিন</h3>
+      <div class="conv-row">
+        <input type="number" id="cvValue" placeholder="মান লিখুন" value="1">
+        <select id="cvFrom"></select>
+        <span style="font-weight:700;">→</span>
+        <select id="cvTo"></select>
+      </div>
+      <div class="conv-result" id="cvResult"></div>
+    </div>
+  </section>
+
+  <footer>
+    আপনার ৩টা হাতে লেখা নোটের ছবি থেকে তৈরি — সব সূত্র 2.54 cm/inch, 25.4 mm/inch, 39.37 inch/m, 1.61 km/mile ভিত্তিক আন্তর্জাতিক মান অনুযায়ী যাচাই করা হয়েছে।
+  </footer>
+</div>
+
+<script>
+// reveal steps one by one
+function revealSteps(btn, id){
+  const container = document.getElementById(id);
+  const steps = container.querySelectorAll('.step');
+  let i = 0;
+  btn.disabled = true;
+  btn.textContent = "দেখানো হচ্ছে...";
+  const iv = setInterval(()=>{
+    if(i < steps.length){
+      steps[i].classList.add('show');
+      i++;
+    } else {
+      clearInterval(iv);
+      btn.style.display='none';
+      document.getElementById('ans-'+id).classList.add('show');
+    }
+  }, 550);
+}
+
+// scroll reveal
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('in-view'); }
+  });
+},{threshold:0.15});
+document.querySelectorAll('.fade-up, .figure').forEach(el=>observer.observe(el));
+
+// live converter — everything normalized to millimeters
+const units = {
+  "মিলিমিটার (mm)": 1,
+  "সেন্টিমিটার (cm)": 10,
+  "মিটার (m)": 1000,
+  "কিলোমিটার (km)": 1000000,
+  "ইঞ্চি (inch)": 25.4,
+  "ফুট (feet)": 304.8,
+  "গজ (yard)": 914.4,
+  "মাইল (mile)": 1609344
+};
+const fromSel = document.getElementById('cvFrom');
+const toSel = document.getElementById('cvTo');
+Object.keys(units).forEach(u=>{
+  fromSel.innerHTML += `<option value="${u}">${u}</option>`;
+  toSel.innerHTML += `<option value="${u}">${u}</option>`;
+});
+fromSel.value = "মিটার (m)";
+toSel.value = "ইঞ্চি (inch)";
+
+function doConvert(){
+  const val = parseFloat(document.getElementById('cvValue').value);
+  const from = fromSel.value, to = toSel.value;
+  const result = document.getElementById('cvResult');
+  if(isNaN(val)){ result.textContent = ""; return; }
+  const mm = val * units[from];
+  const out = mm / units[to];
+  const bigger = units[from] < units[to];
+  const op = bigger ? "÷" : "×";
+  result.textContent = `${val} ${from} = ${out.toLocaleString('en-US',{maximumFractionDigits:6})} ${to}`;
+}
+document.getElementById('cvValue').addEventListener('input', doConvert);
+fromSel.addEventListener('change', doConvert);
+toSel.addEventListener('change', doConvert);
+doConvert();
+</script>
+</body>
+</html>
